@@ -18,3 +18,5 @@ export HADOOP_CREDSTORE_PASSWORD=
 # Here the user can define additional environment variables using 'EXPORT', e.g.:
 #   export FOO=bar
 
+export AWS_ACCESS_KEY_ID=minioadmin
+export AWS_SECRET_ACCESS_KEY=minioadmin

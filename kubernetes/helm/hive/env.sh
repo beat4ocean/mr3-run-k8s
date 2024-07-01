@@ -14,7 +14,7 @@
 
 #
 # Basic settings
-# 
+#
 
 REMOTE_BASE_DIR={{.Values.dir.base}}
 REMOTE_WORK_DIR={{.Values.dir.work}}
@@ -86,18 +86,19 @@ WORKER_SECRET={{.Values.name.hive.workerSecret}}
 # Step 4. Configuring HiveServer2 - connecting to Metastore
 #
 
-# HIVE_DATABASE_HOST = host for Metastore database 
-# HIVE_METASTORE_HOST = host for Metastore itself 
-# HIVE_METASTORE_PORT = port for Hive Metastore 
-# HIVE_DATABASE_NAME = database name in Hive Metastore 
-# HIVE_WAREHOUSE_DIR = directory for the Hive warehouse 
+# HIVE_DATABASE_HOST = host for Metastore database
+# HIVE_METASTORE_HOST = host for Metastore itself
+# HIVE_METASTORE_PORT = port for Hive Metastore
+# HIVE_DATABASE_NAME = database name in Hive Metastore
+# HIVE_WAREHOUSE_DIR = directory for the Hive warehouse
 
 HIVE_DATABASE_HOST={{.Values.metastore.databaseHost}}
 
-# if an existing Metastore is used 
+# if an existing Metastore is used
 # HIVE_METASTORE_HOST=red0
 # if a new Metastore Pod is to be created inside K8s
 HIVE_METASTORE_HOST={{if .Values.create.metastore}}hivemr3-metastore-0.metastore.{{.Release.Namespace}}.svc.cluster.local {{- else}}{{.Values.metastore.host}}{{end}}
+#HIVE_METASTORE_HOST={{if .Values.create.metastore}}metastore.{{.Release.Namespace}} {{- else}}{{.Values.metastore.host}}{{end}}
 
 HIVE_METASTORE_PORT={{.Values.metastore.port}}
 HIVE_DATABASE_NAME={{.Values.metastore.databaseName}}
@@ -108,10 +109,10 @@ HIVE_DATABASE_NAME={{.Values.metastore.databaseName}}
 #   /opt/mr3-run/work-dir/warehouse/
 HIVE_WAREHOUSE_DIR={{.Values.metastore.warehouseDir}}
 
-# Specifies hive.metastore.sasl.enabled 
+# Specifies hive.metastore.sasl.enabled
 METASTORE_SECURE_MODE={{.Values.metastore.secureMode}}
 
-# For security in Metastore 
+# For security in Metastore
 # Kerberos principal for Metastore; cf. 'hive.metastore.kerberos.principal' in hive-site.xml
 HIVE_METASTORE_KERBEROS_PRINCIPAL={{.Values.metastore.kerberosPrincipal}}
 # Kerberos keytab for Metastore; cf. 'hive.metastore.kerberos.keytab.file' in hive-site.xml
@@ -129,19 +130,19 @@ HIVE_SERVER2_PORT={{.Values.hive.port}}
 HIVE_SERVER2_HTTP_PORT={{.Values.hive.httpport}}
 
 # Heap size in MB for HiveServer2
-# With --local option, mr3.am.resource.memory.mb and mr3.am.local.resourcescheduler.max.memory.mb should be smaller. 
+# With --local option, mr3.am.resource.memory.mb and mr3.am.local.resourcescheduler.max.memory.mb should be smaller.
 HIVE_SERVER2_HEAPSIZE={{.Values.hive.heapSize}}
 
-# For security in HiveServer2 
+# For security in HiveServer2
 # Beeline should also provide this Kerberos principal.
-# Authentication option: NONE (uses plain SASL), NOSASL, KERBEROS, LDAP, PAM, and CUSTOM; cf. 'hive.server2.authentication' in hive-site.xml 
+# Authentication option: NONE (uses plain SASL), NOSASL, KERBEROS, LDAP, PAM, and CUSTOM; cf. 'hive.server2.authentication' in hive-site.xml
 HIVE_SERVER2_AUTHENTICATION={{.Values.hive.authentication}}
-# Kerberos principal for HiveServer2; cf. 'hive.server2.authentication.kerberos.principal' in hive-site.xml 
+# Kerberos principal for HiveServer2; cf. 'hive.server2.authentication.kerberos.principal' in hive-site.xml
 HIVE_SERVER2_KERBEROS_PRINCIPAL={{.Values.hive.kerberosPrincipal}}
-# Kerberos keytab for HiveServer2; cf. 'hive.server2.authentication.kerberos.keytab' in hive-site.xml 
+# Kerberos keytab for HiveServer2; cf. 'hive.server2.authentication.kerberos.keytab' in hive-site.xml
 HIVE_SERVER2_KERBEROS_KEYTAB=$KEYTAB_MOUNT_DIR/{{.Values.hive.kerberosKeytab}}
 
-# Specifies whether Hive token renewal is enabled inside DAGAppMaster and ContainerWorkers 
+# Specifies whether Hive token renewal is enabled inside DAGAppMaster and ContainerWorkers
 TOKEN_RENEWAL_HIVE_ENABLED={{.Values.hive.tokenRenewalEnabled}}
 
 # Truststore for HiveServer2
@@ -163,14 +164,14 @@ USER_KEYTAB=$KEYTAB_MOUNT_DIR/{{.Values.hdfs.userKeytab}}
 # for mr3.k8s.keytab.mount.file
 KEYTAB_MOUNT_FILE={{.Values.hdfs.userKeytab}}
 
-# Specifies whether HDFS token renewal is enabled inside DAGAppMaster and ContainerWorkers 
+# Specifies whether HDFS token renewal is enabled inside DAGAppMaster and ContainerWorkers
 TOKEN_RENEWAL_HDFS_ENABLED={{.Values.hdfs.tokenRenewalEnabled}}
 
 #
 # Step 7. Additional settings
 #
 
-# Logging level 
+# Logging level
 LOG_LEVEL={{.Values.logLevel}}
 
 #
@@ -184,13 +185,13 @@ HIVE_METASTORE_HEAPSIZE={{.Values.metastore.heapSize}}
 HIVE_METASTORE_DB_TYPE={{.Values.metastore.dbType}}
 
 #
-# For running HiveCLI 
+# For running HiveCLI
 #
 
-# Heap size in MB for HiveCLI ('hive' command) 
-# With --local option, mr3.am.resource.memory.mb and mr3.am.local.resourcescheduler.max.memory.mb should be smaller. 
+# Heap size in MB for HiveCLI ('hive' command)
+# With --local option, mr3.am.resource.memory.mb and mr3.am.local.resourcescheduler.max.memory.mb should be smaller.
 HIVE_CLIENT_HEAPSIZE=16384
 
-# unset because 'hive' command reads SPARK_HOME and may accidentally expand the classpath with HiveConf.class from Spark. 
+# unset because 'hive' command reads SPARK_HOME and may accidentally expand the classpath with HiveConf.class from Spark.
 unset SPARK_HOME
 

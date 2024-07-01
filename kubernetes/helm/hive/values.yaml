@@ -3,7 +3,7 @@ dir:
   work: "/opt/mr3-run/hive"
   conf: "/opt/mr3-run/conf"
   keytab: "/opt/mr3-run/key"
-  persistentVolumeClaim: "/opt/mr3-run/work-dir"
+  persistentVolumeClaim: "s3a://warehouse/work-dir"
 
 name:
   hive:
@@ -25,12 +25,12 @@ name:
   persistentVolumeClaim: workdir-pvc
 
 docker:
-  image: mr3project/hive3:1.10
-  containerWorkerImage: mr3project/hive3:1.10
+  image: mr3project/hive3mod:1.10
+  containerWorkerImage: mr3project/hive3mod:1.10
   # do not use a composite name like hive@RED, hive/red0@RED
   user: hive
   imagePullPolicy: IfNotPresent
-  imagePullSecrets: 
+  imagePullSecrets:
 
 create:
   # specifies whether or not to create metastore service inside k8s
@@ -39,17 +39,19 @@ create:
   serviceAccount: true
 
 metastore:
-  # if create.metastore == true, this field will be ignored and 
+  # if create.metastore == true, this field will be ignored and
   # replaced with hivemr3-metastore-0.metastore.{{namespace}}.svc.cluster.local
-  host: red0
+#  host: metastore.hive
+  host: metastore.postgresql
   port: 9850
 
-  databaseHost: mysql.hivemr3.svc.cluster.local
-  databaseName: hive5mr3
+#  databaseHost: mysql.hivemr3.svc.cluster.local:3306
+  databaseHost: postgresql.postgresql:5432
+  databaseName: metastore
   # argument to schemaTool (not for hive.metastore.db.type in hive-site.xml)
-  dbType: mysql
+  dbType: postgres
 
-  warehouseDir: s3a://your-warehouse-dir/warehouse
+  warehouseDir: s3a://warehouse
 
   initSchema: true
   mountLib: true
@@ -60,20 +62,20 @@ metastore:
   kerberosPrincipal: hive/red0@RED
   # keytab file under dir.keytab
   kerberosKeytab: "hive.service.keytab"
-  
+
   resources:
     requests:
       cpu: 1
-      memory: 8Gi
+      memory: 1Gi
     limits:
       cpu: 1
-      memory: 8Gi
+      memory: 2Gi
   heapSize: 8192
 
 hive:
   port: 9852
   httpport: 10001
-  externalIp: 1.1.1.1
+  externalIp: 192.168.1.100
   replicas: 1
   # amMode options: kubernetes, localthread, and localprocess
   amMode: kubernetes
@@ -85,7 +87,7 @@ hive:
   kerberosPrincipal: hive/red0@RED
   # keytab file under dir.keytab
   kerberosKeytab: "hive.service.keytab"
-  # specifies whether Hive token renewal is enabled inside DAGAppMaster and ContainerWorkers 
+  # specifies whether Hive token renewal is enabled inside DAGAppMaster and ContainerWorkers
   tokenRenewalEnabled: false
 
   # Truststore for HiveServer2
@@ -96,7 +98,7 @@ hive:
   resources:
     requests:
       cpu: 1
-      memory: 8Gi
+      memory: 4Gi
     limits:
       cpu: 1
       memory: 8Gi
@@ -117,7 +119,7 @@ amConfig:
   atsSecretKey:
 
 workDir:
-  # if false, the user should manually create PersistentVolumeClaim of the same name specified by the 
+  # if false, the user should manually create PersistentVolumeClaim of the same name specified by the
   # field name.persistentVolume, and PersistentVolume if necessary
   create: true
 
@@ -132,17 +134,22 @@ workDir:
   # volumeStr should be indented properly with a double space (or multiple double spaces) after '\n'.
   #   ex. okay  -> volumeStr: "hostPath:\n  path: /work/nfs/mr3-run-work-dir"
   #   ex. wrong -> volumeStr: "hostPath:\n path: /work/nfs/mr3-run-work-dir"
-  volumeStr: "hostPath:\n  path: /data1/hive/workdir"
+  volumeStr: "hostPath:\n  path: /data/hive/workdir"
 
 prometheus:
   create: false
   port: 9890
-  externalIp: 1.1.1.1
+  externalIp: 192.168.1.100
 
 logLevel: INFO
 
 hostAliases:
-- ip: "1.1.1.1"
+- ip: "192.168.1.101"
   hostnames:
-  - "red0"
-
+  - "debian101"
+- ip: "192.168.1.102"
+  hostnames:
+    - "debian102"
+- ip: "192.168.1.103"
+  hostnames:
+    - "debian103"

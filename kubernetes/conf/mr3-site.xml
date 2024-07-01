@@ -49,7 +49,7 @@
   <value>container.kill.wait.workervertex</value>
   <description>
     container.kill.wait.workervertex: wait until WorkerVertexes terminate
-    container.kill.nowait: kill without waiting 
+    container.kill.nowait: kill without waiting
   </description>
 </property>
 
@@ -160,7 +160,7 @@
 
 <!-- Kubernetes -->
 
-<!-- mr3.master.mode is set in mr3-setup.sh --> 
+<!-- mr3.master.mode is set in mr3-setup.sh -->
 
 <property>
   <name>mr3.am.acls.enabled</name>
@@ -200,14 +200,14 @@
 <!-- AWS_REGION for running on AWS EKS -->
 <property>
   <name>mr3.am.launch.env</name>
-  <value>LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/mr3-run/hadoop/apache-hadoop/lib/native,HADOOP_CREDSTORE_PASSWORD,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,AWS_REGION,USE_JAVA_17</value>
+  <value>LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/mr3-run/hadoop/apache-hadoop/lib/native,HADOOP_CREDSTORE_PASSWORD,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,USE_JAVA_17</value>
 </property>
 
 <!-- $LD_LIBRARY_PATH is automatically expanded to the current value inside DAGAppMaster (from mr3.am.launch.env), so do not include it -->
 <!-- AWS_REGION for running on AWS EKS -->
 <property>
   <name>mr3.container.launch.env</name>
-  <value>LD_LIBRARY_PATH=/opt/mr3-run/hadoop/apache-hadoop/lib/native,HADOOP_CREDSTORE_PASSWORD,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,AWS_REGION,USE_JAVA_17</value>
+  <value>LD_LIBRARY_PATH=/opt/mr3-run/hadoop/apache-hadoop/lib/native,HADOOP_CREDSTORE_PASSWORD,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,USE_JAVA_17</value>
 </property>
 
 <property>
@@ -226,7 +226,7 @@
 </property>
 
 <!-- These variables are all set in mr3/mr3-setup.sh:
-  mr3.cluster.additional.classpath 
+  mr3.cluster.additional.classpath
   mr3.principal
   mr3.keytab
   mr3.token.renewal.hdfs.enabled
@@ -315,7 +315,7 @@
   <name>mr3.container.command.num.waits.in.reserved</name>
   <value>360</value>
   <description>
-    Ensure mr3.container.command.num.waits.in.reserved * 1 second > mr3.k8s.pod.creation.timeout.ms. 
+    Ensure mr3.container.command.num.waits.in.reserved * 1 second > mr3.k8s.pod.creation.timeout.ms.
   </description>
 </property>
 
@@ -364,7 +364,7 @@
 
 <property>
   <name>mr3.k8s.host.aliases</name>
-  <value>red0=1.1.1.1</value>
+  <value>debian101=192.168.1.101,debian101=192.168.1.102,debian101=192.168.1.103</value>
 </property>
 
 <property>
@@ -387,7 +387,7 @@
 <!-- set to /ephemeral1 with instance storage mounted on /ephemeral1 for worker Pod on AWS EKS -->
 <property>
   <name>mr3.k8s.pod.worker.hostpaths</name>
-  <value>/data1/k8s,/data2/k8s,/data3/k8s,/data4/k8s,/data5/k8s,/data6/k8s</value>
+  <value>/data/mr3/data1,/data/mr3/data2,/data/mr3/data3</value>
 </property>
 
 <property>

@@ -47,7 +47,7 @@
      com.amazonaws.auth.WebIdentityTokenCredentialsProvider -->
 <property>
   <name>fs.s3a.aws.credentials.provider</name>
-  <value></value>
+  <value>com.amazonaws.auth.EnvironmentVariableCredentialsProvider</value>
 </property>
 
 <property>
@@ -59,13 +59,13 @@
 <!-- do not set on AWS EKS -->
 <property>
   <name>fs.s3a.endpoint</name>
-  <value></value>
+  <value>http://minio.minio:9000</value>
 </property>
 
 <!-- set to true when using path-style access to S3-compliant storage -->
 <property>
   <name>fs.s3a.path.style.access</name>
-  <value>false</value>
+  <value>true</value>
 </property>
 
 <property>

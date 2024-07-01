@@ -1,17 +1,13 @@
-{{ if .Values.workDir.create -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  #namespace: hivemr3
-  name: {{ .Values.name.persistentVolumeClaim }}
+  namespace: hivemr3
+  name: workdir-pvc
+  labels: {}
 spec:
   resources:
     requests:
-      storage: {{ .Values.workDir.volumeClaimSize }}
+      storage: 10Gi
+  storageClassName: ceph-filesystem
   accessModes:
-  - ReadWriteMany
-  storageClassName: {{ .Values.workDir.storageClassName | quote }}
-  selector:
-    matchLabels:
-      hivemr3_app: hiveserver2
-{{ end }}
+    - ReadWriteMany

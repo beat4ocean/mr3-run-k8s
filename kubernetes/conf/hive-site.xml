@@ -17,7 +17,7 @@
 
 <property>
   <name>hive.compactor.initiator.on</name>
-  <value>true</value>
+  <value>false</value>
 </property>
 
 <property>
@@ -302,16 +302,16 @@
 
 <property>
   <name>hive.security.authenticator.manager</name>
-  <!-- <value>org.apache.hadoop.hive.ql.security.HadoopDefaultAuthenticator</value> -->
+   <value>org.apache.hadoop.hive.ql.security.HadoopDefaultAuthenticator</value>
   <!-- <value>org.apache.hadoop.hive.ql.security.ProxyUserAuthenticator</value> -->
-  <value>org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator</value>
+<!--  <value>org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator</value>-->
 </property>
 
 <property>
   <name>hive.security.authorization.manager</name>
-  <!-- <value>org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdConfOnlyAuthorizerFactory</value> -->
+   <value>org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdConfOnlyAuthorizerFactory</value>
   <!-- <value>org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory</value> -->
-  <value>org.apache.ranger.authorization.hive.authorizer.RangerHiveAuthorizerFactory</value>
+<!--  <value>org.apache.ranger.authorization.hive.authorizer.RangerHiveAuthorizerFactory</value>-->
 </property>
 
 <!-- set to false in order not to create ZooKeeperClient in HiveServer2
@@ -346,7 +346,7 @@
   <value>false</value>
 </property>
 
-<property> 
+<property>
   <name>hive.security.authorization.sqlstd.confwhitelist.append</name>
   <value>hive\.querylog\.location.*|hive\.mr3\.map\.task.*|hive\.mr3\.reduce\.task.*</value>
 </property>
@@ -355,29 +355,34 @@
 
 <property>
   <name>hive.metastore.db.type</name>
-  <value>MYSQL</value>
+  <value>POSTGRES</value>
 </property>
 
-<!-- set to com.mysql.jdbc.Driver if necessary -->
+<!-- set to org.postgresql.Driver for PostgreSQL -->
 <property>
   <name>javax.jdo.option.ConnectionDriverName</name>
-  <value>com.mysql.cj.jdbc.Driver</value>
+  <value>org.postgresql.Driver</value>
 </property>
+
+<!--<property>-->
+<!--  <name>hive.aux.jars.path</name>-->
+<!--  <value>/opt/mr3-run/lib/postgresql-42.3.2.jar</value>-->
+<!--</property>-->
 
 <property>
   <name>javax.jdo.option.ConnectionURL</name>
-  <value>jdbc:mysql://${hive.database.host}/${hive.database.name}?createDatabaseIfNotExist=true&amp;useSSL=false</value>
-  <!-- <value>jdbc:mysql://${hive.database.host}/${hive.database.name}?createDatabaseIfNotExist=true&amp;useSSL=true&amp;verifyServerCertificate=true</value> -->
+<!--  <value>jdbc:postgresql://${hive.database.host}:${hive.database.port}/${hive.database.name}</value>-->
+  <value>jdbc:postgresql://${hive.database.host}/${hive.database.name}</value>
 </property>
 
 <property>
   <name>javax.jdo.option.ConnectionUserName</name>
-  <value>root</value>
+  <value>postgres</value>
 </property>
 
 <property>
   <name>javax.jdo.option.ConnectionPassword</name>
-  <value>passwd</value>
+  <value>123456</value>
 </property>
 
 <property>
@@ -468,7 +473,7 @@
   <name>hive.auto.convert.join.noconditionaltask.size</name>
   <value>4000000000</value>
 </property>
-    
+
 <property>
   <name>hive.optimize.dynamic.partition.hashjoin</name>
   <value>true</value>
@@ -535,16 +540,16 @@
 <property>
   <name>hive.llap.io.threadpool.size</name>
   <value>10</value>
-  <description> 
+  <description>
     hive.llap.io.threadpool.size must be >= # of TaskAttempts running in a ContainerWorker (and hive.llap.daemon.num.executors).
     Cf. HIVE-24626
   </description>
 </property>
-    
+
 <property>
   <name>hive.llap.daemon.num.executors</name>
   <value>10</value>
-  <description> 
+  <description>
     Used as an estimate number of Reducers in LlapDecider when no ContainerWorkers are running
   </description>
 </property>
@@ -590,7 +595,7 @@
   <name>hive.llap.execution.mode</name>
   <value>all</value>
 </property>
-    
+
 <property>
   <name>hive.aux.jars.path</name>
   <value></value>
@@ -604,7 +609,7 @@
     Can be set to false if no additional resources are added (other than hive.aux.jars.path)
   </description>
 </property>
-    
+
 <!-- MR3 -->
 
 <property>
@@ -743,12 +748,12 @@
  -->
 <property>
   <name>hive.exec.scratchdir</name>
-  <value>/opt/mr3-run/work-dir/${user.name}</value>
+  <value>s3a://warehouse/work-dir/${user.name}</value>
 </property>
 
 <property>
   <name>hive.query.results.cache.directory</name>
-  <value>/opt/mr3-run/work-dir/_resultscache_</value>
+  <value>s3a://warehouse/work-dir/_resultscache_</value>
 </property>
 
 <property>
